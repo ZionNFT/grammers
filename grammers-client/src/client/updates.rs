@@ -64,10 +64,11 @@ fn prepare_channel_difference(
         } else {
             USER_CHANNEL_DIFF_LIMIT
         };
-        log::debug!(
-            "requesting channel difference for {:?} using session fallback (pts={})",
+        log::info!(
+            "requesting channel difference for {:?} using session fallback (pts={}, limit={})",
             id,
-            request.pts
+            request.pts,
+            request.limit
         );
         return Some(request);
     }
