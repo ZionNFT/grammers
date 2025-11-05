@@ -569,7 +569,7 @@ impl MessageBoxes {
                     return (Some(info.key), None);
                 }
                 Ordering::Less => {
-                    info!(
+                    debug!(
                         "gap on update for {:?} (local {:?}, count {:?}, remote {:?})",
                         info.key, local_pts, info.count, info.pts
                     );
