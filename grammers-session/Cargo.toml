@@ -14,7 +14,7 @@ categories = []
 edition = "2024"
 
 [features]
-default = ["sqlite-storage"]
+default = []
 sqlite-storage = ["dep:sqlite"]
 
 [dependencies]
