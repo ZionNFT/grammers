@@ -21,6 +21,7 @@ use std::collections::VecDeque;
 use std::future::Future;
 use std::sync::Arc;
 use std::time::Duration;
+use tracing::warn;
 
 const MAX_PARTICIPANT_LIMIT: usize = 200;
 const MAX_PHOTO_LIMIT: usize = 100;
@@ -408,7 +409,16 @@ impl Client {
             .await?;
 
         if res.len() != 1 {
-            panic!("fetching only one user should exactly return one user");
+            warn!(
+                response = ?res,
+                "get_me: received unexpected number of users"
+            );
+            return Err(InvocationError::Rpc(RpcError {
+                code: 404,
+                name: "USER_NOT_FOUND".to_string(),
+                value: Some("Expected 1 user for get_me, got different amount".to_string()),
+                caused_by: None,
+            }));
         }
 
         Ok(User::from_raw(res.pop().unwrap()))
@@ -627,7 +637,21 @@ impl Client {
                     })
                     .await?;
                 if res.len() != 1 {
-                    panic!("fetching only one user should exactly return one user");
+                    warn!(
+                        peer_id = ?peer.id,
+                        response = ?res,
+                        "resolve_peer: received unexpected number of users"
+                    );
+                    return Err(InvocationError::Rpc(RpcError {
+                        code: 404,
+                        name: "USER_NOT_FOUND".to_string(),
+                        value: Some(format!(
+                            "Expected 1 user for resolve_peer on {:?}, got {}",
+                            peer.id,
+                            res.len()
+                        )),
+                        caused_by: None,
+                    }));
                 }
                 Peer::from_user(res.pop().unwrap())
             }
