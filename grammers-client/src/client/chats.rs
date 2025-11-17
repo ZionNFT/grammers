@@ -416,7 +416,7 @@ impl Client {
             return Err(InvocationError::Rpc(RpcError {
                 code: 404,
                 name: "USER_NOT_FOUND".to_string(),
-                value: Some("Expected 1 user for get_me, got different amount".to_string()),
+                value: None,
                 caused_by: None,
             }));
         }
@@ -645,11 +645,7 @@ impl Client {
                     return Err(InvocationError::Rpc(RpcError {
                         code: 404,
                         name: "USER_NOT_FOUND".to_string(),
-                        value: Some(format!(
-                            "Expected 1 user for resolve_peer on {:?}, got {}",
-                            peer.id,
-                            res.len()
-                        )),
+                        value: None,
                         caused_by: None,
                     }));
                 }
